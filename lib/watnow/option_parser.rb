@@ -6,7 +6,7 @@ module Watnow
     def self.parse(args)
       # Defaults
       options = {}
-      options[:directory] = './'
+      options[:directory] = '.'
 
       opts = OptionParser.new('', 24, '  ') do |opts|
         opts.separator '  Usage: watnow [options]'

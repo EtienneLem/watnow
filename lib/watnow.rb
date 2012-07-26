@@ -8,43 +8,58 @@ module Watnow
 
     def initialize
       options = Watnow::OptParser.parse(ARGV)
-      scan options[:directory]
+
+      annotations = scan(options[:directory])
+      display(annotations)
     end
 
     private
 
-    def scan(dir)
-      result = []
-
+    def scan(dir, annotations=[])
       Dir.glob("#{dir}/*") do |path|
         next if File.basename(path) =~ /(#{IGNORES.join('|')})$/
 
         if File.directory? path
-          scan path
+          scan(path, annotations)
         else
           begin
             comment_closing_tags = %w(\*\/ -->)
             content = read_file(path, /(TODO|FIXME):?\s*(.*)/)
-            result << content if content
+            annotations << content if content
           rescue
             nil
           end
         end
       end
 
-      result.each do |annotation|
-        puts annotation
-      end
+      annotations
     end
 
     def read_file(file, pattern)
       lineno = 0
+
       result = File.readlines(file).inject([]) do |list, line|
         lineno += 1
         next list unless line =~ pattern
-        list << { :lineno => lineno, :tag => $1, :line => $2.gsub(/\s*(\*\/|-->)$/, '') }
+        list << { :lineno => lineno, :tag => $1, :message => $2.gsub(/\s*(\*\/|-->)$/, '') }
       end
-      result.empty? ? nil : { file => result }
+
+      result.empty? ? nil : { :file => file, :lines => result }
+    end
+
+    def display(annotations)
+      id = 0
+
+      annotations.each do |annotation|
+        file = annotation[:file]
+        lines = annotation[:lines]
+
+        puts "\n#{file}"
+        lines.each do |line|
+          id += 1
+          puts "##{id} [#{line[:tag]}] #{line[:message]}"
+        end
+      end
     end
 
   end

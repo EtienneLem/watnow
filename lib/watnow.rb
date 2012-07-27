@@ -1,5 +1,7 @@
 require 'watnow/version'
 require 'watnow/option_parser'
+require 'watnow/annotation/annotation'
+require 'watnow/annotation/annotation_line'
 
 module Watnow
   class Extractor
@@ -7,10 +9,9 @@ module Watnow
     IGNORES = %w(tmp node_modules db public log)
 
     def initialize
-      options = Watnow::OptParser.parse(ARGV)
-      puts options
+      options = OptParser.parse(ARGV)
 
-      annotations = scan(options[:directory])
+      scan(options[:directory])
 
       if options[:open]
         puts "open up #{options[:open]}"
@@ -33,14 +34,12 @@ module Watnow
           begin
             comment_closing_tags = %w(\*\/ -->)
             content = read_file(path, /(TODO|FIXME):?\s*(.*)/)
-            annotations << content if content
+            Annotation.new(content) if content
           rescue
             nil
           end
         end
       end
-
-      annotations
     end
 
     def read_file(file, pattern)

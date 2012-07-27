@@ -8,9 +8,17 @@ module Watnow
 
     def initialize
       options = Watnow::OptParser.parse(ARGV)
+      puts options
 
       annotations = scan(options[:directory])
-      display(annotations)
+
+      if options[:open]
+        puts "open up #{options[:open]}"
+      elsif options[:close]
+        puts "close up #{options[:close]}"
+      else
+        display(annotations)
+      end
     end
 
     private

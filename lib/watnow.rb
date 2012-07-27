@@ -22,7 +22,7 @@ module Watnow
         annotation_line = AnnotationLine.find(id)
         remove_line_of_file(annotation_line.annotation.file, annotation_line.lineno)
       else
-        display(annotations)
+        display(Annotation.all)
       end
     end
 
@@ -82,13 +82,10 @@ module Watnow
       id = 0
 
       annotations.each do |annotation|
-        file = annotation[:file]
-        lines = annotation[:lines]
-
-        puts "\n#{file}"
-        lines.each do |line|
+        puts "\n#{annotation.file}"
+        annotation.lines.each do |annotation_line|
           id += 1
-          puts "##{id} [#{line[:tag]}] #{line[:message]}"
+          puts "##{annotation_line.id} [#{annotation_line.tag}] #{annotation_line.message}"
         end
       end
     end

@@ -17,8 +17,10 @@ module Watnow
         id = Integer(options[:open])
         annotation_line = AnnotationLine.find(id)
         open_file_at_line(annotation_line.annotation.file, annotation_line.lineno)
-      elsif options[:close]
-        puts "close up #{options[:close]}"
+      elsif options[:remove]
+        id = Integer(options[:remove])
+        annotation_line = AnnotationLine.find(id)
+        remove_line_of_file(annotation_line.annotation.file, annotation_line.lineno)
       else
         display(annotations)
       end
@@ -56,18 +58,24 @@ module Watnow
       result.empty? ? nil : { :file => file, :lines => result }
     end
 
-    def open_file_at_line(file, line)
-      command = file
+    def open_file_at_line(filename, line)
+      command = filename
 
       if ENV['EDITOR'] =~ /mate/
-        command = "#{file} --line #{line}"
+        command = "#{filename} --line #{line}"
       elsif ENV['EDITOR'] =~ /vi|vim/
-        command = "+#{line} #{file}"
+        command = "+#{line} #{filename}"
       elsif ENV['EDITOR'] =~ /subl/
-        command = "#{file}:#{line}"
+        command = "#{filename}:#{line}"
       end
 
       Kernel.system("$EDITOR #{command}")
+    end
+
+    def remove_line_of_file(filename, line)
+      file = File.readlines(filename)
+      file.delete_at(line - 1)
+      File.open(filename, 'w+') {|f| f.write file.join() }
     end
 
     def display(annotations)

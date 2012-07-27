@@ -1,4 +1,5 @@
 require 'watnow/version'
+require 'watnow/config'
 require 'watnow/option_parser'
 require 'watnow/annotation/annotation'
 require 'watnow/annotation/annotation_line'
@@ -6,10 +7,9 @@ require 'watnow/annotation/annotation_line'
 module Watnow
   class Extractor
 
-    IGNORES = %w(tmp node_modules db public log)
-
     def initialize
       options = OptParser.parse(ARGV)
+      config = Config.init
 
       scan(options[:directory])
 
@@ -30,14 +30,14 @@ module Watnow
 
     def scan(dir, annotations=[])
       Dir.glob("#{dir}/*") do |path|
-        next if File.basename(path) =~ /(#{IGNORES.join('|')})$/
+        next if File.basename(path) =~ /(#{Config.options['ignores'].join('|')})$/
 
         if File.directory? path
           scan(path, annotations)
         else
           begin
             comment_closing_tags = %w(\*\/ -->)
-            content = read_file(path, /(TODO|FIXME):?\s*(.*)/)
+            content = read_file(path, /(#{Config.options['patterns'].join('|')}):?\s*(.*)/)
             Annotation.new(content) if content
           rescue
             nil

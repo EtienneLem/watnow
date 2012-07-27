@@ -14,7 +14,9 @@ module Watnow
       scan(options[:directory])
 
       if options[:open]
-        puts "open up #{options[:open]}"
+        id = Integer(options[:open])
+        annotation_line = AnnotationLine.find(id)
+        open_file_at_line(annotation_line.annotation.file, annotation_line.lineno)
       elsif options[:close]
         puts "close up #{options[:close]}"
       else
@@ -52,6 +54,20 @@ module Watnow
       end
 
       result.empty? ? nil : { :file => file, :lines => result }
+    end
+
+    def open_file_at_line(file, line)
+      command = file
+
+      if ENV['EDITOR'] =~ /mate/
+        command = "#{file} --line #{line}"
+      elsif ENV['EDITOR'] =~ /vi|vim/
+        command = "+#{line} #{file}"
+      elsif ENV['EDITOR'] =~ /subl/
+        command = "#{file}:#{line}"
+      end
+
+      Kernel.system("$EDITOR #{command}")
     end
 
     def display(annotations)

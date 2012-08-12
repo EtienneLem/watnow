@@ -31,8 +31,8 @@ module Watnow
         # Commands
         opts.separator ''
         opts.separator '  watnow commands:'
-        opts.separator '  open    open an annotation in your editor'
-        opts.separator '  remove  remove an annotation'
+        opts.separator '  open <ID>    open annotation ID in your editor'
+        opts.separator '  remove <ID>  remove annotation ID'
 
         options[:open] = get_option_value('open', args)
         options[:remove] = get_option_value('remove', args)

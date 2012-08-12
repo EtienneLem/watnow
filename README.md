@@ -10,7 +10,43 @@ $ gem install watnow
 
 ## Usage
 
-TODO: Write usage instructions here
+```sh
+$ watnow --help
+
+Usage: watnow [options]
+
+-h, --help               show this message
+-v, --version            display version
+-d, --directory DIR      directory DIR to scan (defaults: ./)
+
+watnow commands:
+open <ID>    open annotation ID in your editor
+remove <ID>  remove annotation ID
+```
+
+## Commands
+### open
+Opens an annotation in your $EDITOR focused on the annotation line
+```sh
+$ watnow open 13
+```
+
+### remove
+Removes the annotation line form its file
+```sh
+$ watnow remove 13
+```
+
+## Watnow config
+You can override default configs in a `~/.watnowconfig` file. Supported options are:
+- color (Boolean)  | Enable/disable colored output
+- Patterns (Array) | An array of string that you want to monitor
+
+Use a YML syntax:
+```
+color: false
+patterns: [banana, potato]
+```
 
 ## Contributing
 

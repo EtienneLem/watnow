@@ -3,6 +3,7 @@ require 'watnow/config'
 require 'watnow/option_parser'
 require 'watnow/annotation/annotation'
 require 'watnow/annotation/annotation_line'
+require 'colored'
 
 module Watnow
   class Extractor
@@ -82,12 +83,25 @@ module Watnow
       id = 0
 
       annotations.each do |annotation|
-        puts "\n#{annotation.file}"
+        filename = annotation.file.gsub(/^\.\//, '')
+        display_line "\n#{filename}", 'magenta'
         annotation.lines.each do |annotation_line|
           id += 1
-          puts "##{annotation_line.id} [#{annotation_line.tag}] #{annotation_line.message}"
+          display_text "[ "
+          display_text "#{annotation_line.id}", 'cyan'
+          display_text " ] #{' ' if id < 10}"
+          display_line "#{annotation_line.tag}: #{annotation_line.message}"
         end
       end
+    end
+
+    def display_line(msg, color=nil)
+      display_text "#{msg}\n", color
+    end
+
+    def display_text(msg, color=nil)
+      output = color && Config.options['color'] ? "#{msg}".send(color) : msg
+      STDOUT.write "#{output}"
     end
 
   end

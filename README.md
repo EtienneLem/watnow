@@ -32,7 +32,7 @@ $ watnow open 13
 ```
 
 ### remove
-Removes the annotation line form its file
+Removes the annotation line from its file
 ```sh
 $ watnow remove 13
 ```

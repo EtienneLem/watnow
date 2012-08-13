@@ -37,7 +37,6 @@ module Watnow
           scan(path, annotations)
         else
           begin
-            comment_closing_tags = %w(\*\/ -->)
             content = read_file(path, /(#{Config.options['patterns'].join('|')}):?\s*(.*)/)
             Annotation.new(content) if content
           rescue
@@ -53,7 +52,7 @@ module Watnow
       result = File.readlines(file).inject([]) do |list, line|
         lineno += 1
         next list unless line =~ pattern
-        list << { :lineno => lineno, :tag => $1, :message => $2.gsub(/\s*(\*\/|-->)$/, '') }
+        list << { :lineno => lineno, :tag => $1, :message => $2.gsub(/\s*(\*\/|-->|%>)$/, '') }
       end
 
       result.empty? ? nil : { :file => file, :lines => result }

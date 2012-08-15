@@ -31,12 +31,13 @@ module Watnow
 
     def scan(dir, annotations=[])
       Dir.glob("#{dir}/*") do |path|
-        next if File.basename(path) =~ /(#{Config.options['ignores'].join('|')})$/
+        next if File.basename(path) =~ /(#{Config.options['folder_ignore'].join('|')})$/
 
         if File.directory? path
           scan(path, annotations)
         else
           begin
+            next if File.extname(path) =~ /(#{Config.options['file_extension_ignore'].join('|')})$/
             content = read_file(path, /(#{Config.options['patterns'].join('|')}):?\s*(.*)/)
             Annotation.new(content) if content
           rescue

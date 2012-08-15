@@ -3,7 +3,8 @@ require 'yaml'
 module Watnow
   class Config
 
-    IGNORES = %w(tmp node_modules db public log)
+    FOLDER_IGNORE = %w(tmp node_modules db public log)
+    FILE_EXTENSION_IGNORE = %w(tmproj)
     PATTERNS = %w(TODO FIXME)
 
     def self.options
@@ -13,14 +14,16 @@ module Watnow
     def self.init
       defaults = {
         'color' => true,
-        'ignores' => [],
+        'folder_ignore' => [],
+        'file_extension_ignore' => [],
         'patterns' => []
       }
 
       custom = self.load
       @options = defaults.merge(custom)
-      @options['ignores'].concat(IGNORES)
-      @options['patterns'].concat(PATTERNS)  
+      @options['folder_ignore'].concat(FOLDER_IGNORE)
+      @options['file_extension_ignore'].concat(FILE_EXTENSION_IGNORE)
+      @options['patterns'].concat(PATTERNS)
     end
 
     def self.load

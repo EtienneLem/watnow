@@ -38,7 +38,7 @@ module Watnow
         else
           begin
             next if File.extname(path) =~ /(#{Config.options['file_extension_ignore'].join('|')})$/
-            content = read_file(path, /(#{Config.options['patterns'].join('|')}):?\s*(.*)/)
+            content = read_file(path, /(#{Config.options['patterns'].join('|')})/)
             Annotation.new(content) if content
           rescue
             nil
@@ -47,13 +47,31 @@ module Watnow
       end
     end
 
-    def read_file(file, pattern)
+    def read_file(file, patterns)
       lineno = 0
 
       result = File.readlines(file).inject([]) do |list, line|
         lineno += 1
-        next list unless line =~ pattern
-        list << { :lineno => lineno, :tag => $1, :message => $2.gsub(/\s*(\*\/|-->|%>)$/, '') }
+        next list unless line =~ patterns
+
+        tag = line.slice!($1)
+
+        priority = line.slice!(/\s(!+)\s?/)
+        priority = $1 ? $1.length : 0
+
+        mention = line.slice!(/\s@(\w+)\s*/)
+        mention = $1
+
+        message = line.slice!(/(\w.*)/)
+        message = $1
+
+        list << {
+          :lineno => lineno,
+          :tag => tag,
+          :priority => priority,
+          :mention => mention,
+          :message => message.gsub(/\s*(\*\/|-->|%>)$/, '')
+        }
       end
 
       result.empty? ? nil : { :file => file, :lines => result }
@@ -86,11 +104,19 @@ module Watnow
         filename = annotation.file.gsub(/^\.\//, '')
         display_line "\n#{filename}", 'magenta'
         annotation.lines.each do |annotation_line|
+          spaces_count = AnnotationLine.tag_length - annotation_line.tag.length
+          spaces = Array.new(spaces_count + 1).join(' ')
+
           id += 1
           display_text "[ "
           display_text "#{annotation_line.id}", 'cyan'
           display_text " ] #{' ' if id < 10}"
-          display_line "#{annotation_line.tag}: #{annotation_line.message}"
+          display_text "#{annotation_line.tag}: #{spaces}#{annotation_line.message}"
+          if annotation_line.meta_data.count > 0
+            display_line " [#{annotation_line.meta_data.join(', ')}]"
+          else
+            display_line ""
+          end
         end
       end
     end

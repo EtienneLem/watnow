@@ -1,9 +1,10 @@
 module Watnow
   class Annotation
 
+    @@id = 0
     @@instances = []
 
-    attr_accessor :file, :lines
+    attr_accessor :id, :file, :lines, :priority
 
     def self.all
       @@instances
@@ -11,9 +12,11 @@ module Watnow
 
     def initialize(opts)
       super()
+      @priority = 0
       @file = opts[:file]
       @lines = set_lines(opts[:lines])
 
+      @id = @@id += 1
       @@instances << self
     end
 

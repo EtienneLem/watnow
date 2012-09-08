@@ -39,7 +39,7 @@ module Watnow
     def meta_data
       data = []
       data << "@#{@mention}" if @mention
-      data << @priority if @priority > 0
+      data << Array.new(@priority + 1).join('!') if @priority > 0
       data
     end
 

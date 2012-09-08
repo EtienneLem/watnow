@@ -98,8 +98,7 @@ module Watnow
     end
 
     def display(annotations)
-      id = 0
-
+      annotations.sort_by! { |a| [a.priority, -a.id] }
       annotations.each do |annotation|
         filename = annotation.file.gsub(/^\.\//, '')
         display_line "\n#{filename}", 'magenta'
@@ -107,16 +106,11 @@ module Watnow
           spaces_count = AnnotationLine.tag_length - annotation_line.tag.length
           spaces = Array.new(spaces_count + 1).join(' ')
 
-          id += 1
           display_text "[ "
-          display_text "#{annotation_line.id}", 'cyan'
-          display_text " ] #{' ' if id < 10}"
+          display_text [annotation_line.id, *annotation_line.meta_data].join(' - '), 'cyan'
+          display_text " ] #{' ' if annotation_line.id < 10}"
           display_text "#{annotation_line.tag}: #{spaces}#{annotation_line.message}"
-          if annotation_line.meta_data.count > 0
-            display_line " [#{annotation_line.meta_data.join(', ')}]"
-          else
-            display_line ""
-          end
+          display_line ""
         end
       end
     end

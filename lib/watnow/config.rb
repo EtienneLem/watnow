@@ -19,14 +19,14 @@ module Watnow
         'patterns' => []
       }
 
-      custom = self.load
+      custom = self.parse_config_file
       @options = defaults.merge(custom)
       @options['folder_ignore'].concat(FOLDER_IGNORE)
       @options['file_extension_ignore'].concat(FILE_EXTENSION_IGNORE)
       @options['patterns'].concat(PATTERNS)
     end
 
-    def self.load
+    def self.parse_config_file
       begin
         YAML.load_file("#{ENV['HOME']}/.watnowconfig")
       rescue

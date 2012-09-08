@@ -23,10 +23,12 @@ module Watnow
       super()
       @lineno = opts[:lineno]
       @tag = opts[:tag]
-      @priority = opts[:priority]
+      @priority = opts[:priority] || 0
       @mention = opts[:mention]
       @message = opts[:message]
       @annotation = annotation
+
+      @annotation.priority = @priority if @priority > @annotation.priority
 
       @id = @@id += 1
       @@instances << self

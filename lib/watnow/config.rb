@@ -16,7 +16,8 @@ module Watnow
         'color' => true,
         'folder_ignore' => [],
         'file_extension_ignore' => [],
-        'patterns' => []
+        'patterns' => [],
+        'username' => ''
       }
 
       custom = self.parse_config_file

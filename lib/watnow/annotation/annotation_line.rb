@@ -24,7 +24,7 @@ module Watnow
       @lineno = opts[:lineno]
       @tag = opts[:tag]
       @priority = opts[:priority] || 0
-      @mention = opts[:mention]
+      @mention = opts[:mention] || ''
       @message = opts[:message]
       @annotation = annotation
 
@@ -38,7 +38,7 @@ module Watnow
 
     def meta_data
       data = []
-      data << "@#{@mention}" if @mention
+      data << "@#{@mention}" unless @mention.empty?
       data << Array.new(@priority + 1).join('!') if @priority > 0
       data
     end

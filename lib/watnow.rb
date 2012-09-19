@@ -117,11 +117,11 @@ module Watnow
     end
 
     def display_line(msg, color=nil, color_condition=true)
-      display_text "#{msg}\n", color, condition
+      display_text "#{msg}\n", color, color_condition
     end
 
     def display_text(msg, color=nil, color_condition=true)
-      output = color && condition && Config.options['color'] ? "#{msg}".send(color) : msg
+      output = color && color_condition && Config.options['color'] ? "#{msg}".send(color) : msg
       STDOUT.write "#{output}"
     end
 

@@ -11,6 +11,11 @@ $ gem install watnow
 ## Usage
 
 ```sh
+$ watnow
+```
+
+### Help
+```sh
 $ watnow --help
 
 Usage: watnow [options]
@@ -55,12 +60,14 @@ Exclamation mark (!) preceded by a whitespace. (`/\s(!+)\s?/`)
 ```rb
 # TODO !!!: This is level 3 urgent
 # TODO @rafBM: Just do it !
+# TODO: This is not a priority!!
 # TODO !!!!!!!!!!!!! @EtienneLem: This is a nicolas-cage-level urgent task
 ```
 ```sh
+[ 3 ]  TODO: This is not a priority!!
 [ 2 ]  TODO: Just do it [ @rafBM - ! ]
 [ 1 ]  TODO: This is level 3 urgent [ !!! ]
-[ 3 ]  TODO: This is a nicolas-cage-level urgent task [ @EtienneLem - !!!!!!!!!!!!! ]
+[ 4 ]  TODO: This is a nicolas-cage-level urgent task [ @EtienneLem - !!!!!!!!!!!!! ]
 ```
 
 ### Super color-friendly

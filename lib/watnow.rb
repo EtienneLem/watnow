@@ -7,11 +7,10 @@ require 'colored'
 
 module Watnow
   class Extractor
+    include Watnow::Config
 
     def initialize
       options = OptParser.parse(ARGV)
-      config = Config.init
-
       scan(options[:directory])
 
       if options[:open]
@@ -31,14 +30,14 @@ module Watnow
 
     def scan(dir, annotations=[])
       Dir.glob("#{dir}/*") do |path|
-        next if File.basename(path) =~ /(#{Config.options['folder_ignore'].join('|')})$/
+        next if File.basename(path) =~ /(#{Config.folder_ignore.join('|')})$/
 
         if File.directory? path
           scan(path, annotations)
         else
           begin
-            next if File.extname(path) =~ /(#{Config.options['file_extension_ignore'].join('|')})$/
-            content = read_file(path, /(#{Config.options['patterns'].join('|')})/i)
+            next if File.extname(path) =~ /(#{Config.file_extension_ignore.join('|')})$/
+            content = read_file(path, /(#{Config.patterns.join('|')})/i)
             Annotation.new(content) if content
           rescue
             nil
@@ -108,7 +107,7 @@ module Watnow
         annotation.lines.each do |annotation_line|
           spaces_count = AnnotationLine.tag_length - annotation_line.tag.length
           spaces = Array.new(spaces_count + 1).join(' ')
-          is_mentioned = (annotation_line.mention.downcase == Config.options['username'].downcase)
+          is_mentioned = (annotation_line.mention.downcase == Config.username.downcase)
 
           display_text '[ ', 'green', is_mentioned
           display_text annotation_line.id, 'cyan'
@@ -129,7 +128,7 @@ module Watnow
     end
 
     def display_text(msg, color=nil, color_condition=true)
-      output = color && color_condition && Config.options['color'] ? "#{msg}".send(color) : msg
+      output = color && color_condition && Config.color ? "#{msg}".send(color) : msg
       STDOUT.write "#{output}"
     end
 

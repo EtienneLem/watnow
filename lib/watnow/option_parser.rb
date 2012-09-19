@@ -20,7 +20,8 @@ module Watnow
 
         # Version
         opts.on('-v', '--version', 'display version') do
-          puts 'version here'
+          puts VERSION
+          exit
         end
 
         # Directory

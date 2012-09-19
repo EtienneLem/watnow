@@ -2,6 +2,7 @@ require 'yaml'
 
 module Watnow::Config
 
+  # Default constants
   FOLDER_IGNORE = %w(tmp node_modules db public log)
   FILE_EXTENSION_IGNORE = %w(tmproj)
   PATTERNS = %w(TODO FIXME)
@@ -15,13 +16,19 @@ module Watnow::Config
       'username' => ''
     }
 
+    # Parse YAML config file (~/.watnowconfig)
     parser = YamlParser.new
-    custom = parser.parse
-    options = defaults.merge(custom)
+    custom_options = parser.parse
+
+    # Merge defaults with custom options
+    # Add default constants
+    options = defaults.merge(custom_options)
     options['folder_ignore'].concat(FOLDER_IGNORE)
     options['file_extension_ignore'].concat(FILE_EXTENSION_IGNORE)
     options['patterns'].concat(PATTERNS)
 
+    # Generate singleton methods with options keys for quick access
+    # i.e. self.color, self.patterns, self.username, etc
     options.each do |option|
       define_singleton_method option[0] do
         option[1]
@@ -29,6 +36,8 @@ module Watnow::Config
     end
   end
 
+  # Simple YAML parser
+  # Returns empty object if no file found
   class YamlParser
     def parse
       begin

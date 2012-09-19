@@ -1,6 +1,7 @@
 require 'optparse'
 
 module Watnow
+  # Home made Option parser built on top of Ruby’s optparse
   class OptParser
 
     def self.parse(args)
@@ -43,8 +44,6 @@ module Watnow
       opts.parse!(args)
       options
     end
-
-    private
 
     def self.get_option_value(option, args)
       args.include?(option) ? args[args.index(option) + 1] : nil

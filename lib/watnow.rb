@@ -38,7 +38,7 @@ module Watnow
         else
           begin
             next if File.extname(path) =~ /(#{Config.options['file_extension_ignore'].join('|')})$/
-            content = read_file(path, /(#{Config.options['patterns'].join('|')})/)
+            content = read_file(path, /(#{Config.options['patterns'].join('|')})/i)
             Annotation.new(content) if content
           rescue
             nil

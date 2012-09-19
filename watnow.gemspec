@@ -4,9 +4,9 @@ require File.expand_path('../lib/watnow/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Etienne Lemay"]
   gem.email         = ["etienne@heliom.ca"]
-  gem.homepage      = "http://github.com/etiennelem/watnow"
+  gem.homepage      = "https://github.com/etiennelem/watnow"
 
-  gem.description   = "watnow finds and lists your project TODOs and FIXMEs in your terminal"
+  gem.description   = "Watnow finds and lists your project todo and fixme"
   gem.summary       = gem.description
   gem.version       = Watnow::VERSION
 
@@ -15,4 +15,6 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "watnow"
   gem.require_paths = ["lib"]
+
+  gem.add_dependency("colored", "~> 1.2")
 end

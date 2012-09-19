@@ -99,9 +99,12 @@ module Watnow
 
     def display(annotations)
       annotations.sort_by! { |a| [a.priority, -a.id] }
+
       annotations.each do |annotation|
         filename = annotation.file.gsub(/^\.\//, '')
         display_line "\n#{filename}", 'magenta'
+
+        annotation.lines.sort! { |a,b| a.priority <=> b.priority }
         annotation.lines.each do |annotation_line|
           spaces_count = AnnotationLine.tag_length - annotation_line.tag.length
           spaces = Array.new(spaces_count + 1).join(' ')

@@ -105,12 +105,17 @@ module Watnow
         annotation.lines.each do |annotation_line|
           spaces_count = AnnotationLine.tag_length - annotation_line.tag.length
           spaces = Array.new(spaces_count + 1).join(' ')
+          is_mentioned = (annotation_line.mention.downcase == Config.options['username'].downcase)
 
-          is_mentioned = (annotation_line.mention == Config.options['username'])
           display_text '[ ', 'green', is_mentioned
-          display_text [annotation_line.id, *annotation_line.meta_data].join(' - '), 'cyan'
+          display_text annotation_line.id, 'cyan'
           display_text " ] #{' ' if annotation_line.id < 10}", 'green', is_mentioned
           display_text "#{annotation_line.tag}: #{spaces}#{annotation_line.message}", 'green', is_mentioned
+          if annotation_line.meta_data.size > 0
+            display_text ' [ ', 'green', is_mentioned
+            display_text annotation_line.meta_data.join(' - '), 'cyan'
+            display_text ' ]', 'green', is_mentioned
+          end
           display_line ""
         end
       end

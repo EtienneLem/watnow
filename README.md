@@ -1,7 +1,7 @@
 # Watnow
 
-`watnow` finds and lists your project TODOs and FIXMEs in your terminal<br>
-Basically it does what the Rails’ `rake notes` does, but for all kind of projects
+<b>Watnow</b> finds and lists your project TODOs and FIXMEs.<br>
+It basically does what the Rails’ `rake notes` does, but in a more generic way.
 
 ## Installation
 ```sh
@@ -26,32 +26,61 @@ remove <ID>  remove annotation ID
 
 ## Commands
 ### open
-Opens an annotation in your $EDITOR focused on the annotation line
+Opens an annotation in your $EDITOR focused on the annotation line.
 ```sh
 $ watnow open 13
 ```
 
 ### remove
-Removes the annotation line from its file
+Removes the annotation line from its file.<br>
+(Make sure there is nothing else on that line)
 ```sh
 $ watnow remove 13
 ```
 
+## Features
+### Mentions
+```rb
+# TODO @rafBM: Update user form
+# TODO Update user controller @rafBM
+```
+```sh
+[ 2 ] TODO: Update user form [ @rafBM ]
+[ 1 ] TODO: Update user controller [ @rafBM ]
+```
+
+### Priority
+Exclamation mark (!) preceded by a whitespace. (`/\s(!+)\s?/`)
+
+```rb
+# TODO !!!: This is level 3 urgent
+# TODO @rafBM: Just do it !
+# TODO !!!!!!!!!!!!! @EtienneLem: This is a nicolas-cage-level urgent task
+```
+```sh
+[ 2 ]  TODO: Just do it [ @rafBM - ! ]
+[ 1 ]  TODO: This is level 3 urgent [ !!! ]
+[ 3 ]  TODO: This is a nicolas-cage-level urgent task [ @EtienneLem - !!!!!!!!!!!!! ]
+```
+
+### Super color-friendly
+(Seriously, I’m open to color suggestions…)
+![color-friendly](https://s3.amazonaws.com/watnow/colors.png)
+
 ## Watnow config
-You can override default configs in a `~/.watnowconfig` file. Supported options are:
-- color (Boolean)  | Enable/disable colored output
-- Patterns (Array) | An array of string that you want to monitor
-
-Use a YML syntax:
+Override defaults in `~/.watnowconfig`. Supported options are:
 ```
+username  (String)    | A username so that you can be mentioned in TODOs  | Default: ''
+color     (Boolean)   | Enable/disable colored output                     | Default: true
+patterns  (Array)     | An array of string/regex that you want to monitor | Default: []
+```
+
+Use YAML syntax:
+```
+username: EtienneLem
 color: false
-patterns: [banana, potato]
+patterns: [potato, ba(na)+]
 ```
 
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+## Contribution
+My Ruby skills are far from exemplary, please teach me.

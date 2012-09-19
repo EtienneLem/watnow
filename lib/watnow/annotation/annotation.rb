@@ -11,7 +11,6 @@ module Watnow
     end
 
     def initialize(opts)
-      super()
       @priority = 0
       @file = opts[:file]
       @lines = set_lines(opts[:lines])

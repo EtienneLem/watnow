@@ -20,7 +20,6 @@ module Watnow
     end
 
     def initialize(opts, annotation)
-      super()
       @lineno = opts[:lineno]
       @tag = opts[:tag]
       @priority = opts[:priority] || 0

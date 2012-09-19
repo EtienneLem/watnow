@@ -4,7 +4,7 @@ module Watnow::Config
 
   # Default constants
   FOLDER_IGNORE = %w(tmp node_modules db public log)
-  FILE_EXTENSION_IGNORE = %w(tmproj)
+  FILE_EXTENSION_IGNORE = %w(tmproj markdown md txt)
   PATTERNS = %w(TODO FIXME)
 
   def self.included(base)

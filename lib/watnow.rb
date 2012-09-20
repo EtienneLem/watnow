@@ -100,16 +100,20 @@ module Watnow
     # Supported editors are TextMate, Vim & Sublime Text
     def open_file_at_line(filename, line)
       command = filename
+      editor = ENV['EDITOR']
 
       if ENV['EDITOR'] =~ /mate/
         command = "#{filename} --line #{line}"
+        # Remove TextMate -w (wait) option
+        editor =~ /(-\w*(w))/
+        editor = editor.gsub($1, $1.gsub($2, ''))
       elsif ENV['EDITOR'] =~ /vi|vim/
         command = "+#{line} #{filename}"
       elsif ENV['EDITOR'] =~ /subl/
         command = "#{filename}:#{line}"
       end
 
-      Kernel.system("$EDITOR #{command}")
+      Kernel.system("#{editor} #{command}")
     end
 
     # Remove line from given file

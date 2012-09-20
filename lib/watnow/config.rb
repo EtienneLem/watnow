@@ -22,7 +22,7 @@ module Watnow::Config
 
     # Merge defaults with custom options
     # Add default constants
-    options = defaults.merge(custom_options)
+    options = custom_options ? defaults.merge(custom_options) : defaults
     options['folder_ignore'].concat(FOLDER_IGNORE)
     options['file_extension_ignore'].concat(FILE_EXTENSION_IGNORE)
     options['patterns'].concat(PATTERNS)

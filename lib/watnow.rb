@@ -36,7 +36,7 @@ module Watnow
 
     # Recursively scan given directory
     # Ignore folders and files from Config
-    # Create a new Annotation when data si found
+    # Create a new Annotation when data is found
     def scan(dir, annotations=[])
       Dir.glob("#{dir}/*") do |path|
         next if File.basename(path) =~ /(#{Config.folder_ignore.join('|')})$/

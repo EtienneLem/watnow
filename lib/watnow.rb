@@ -139,7 +139,7 @@ module Watnow
           tag_spaces = Array.new(tag_spaces_count + 1).join(' ')
 
           # Boolean. True if current user is being mentioned in the annotation line
-          is_mentioned = (annotation_line.mention.downcase == Config.username.downcase)
+          is_mentioned = !Config.username.empty? && (annotation_line.mention.downcase == Config.username.downcase)
 
           # The actual outputting
           display_text '[ ', 'green', is_mentioned
